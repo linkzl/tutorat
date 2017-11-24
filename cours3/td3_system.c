@@ -7,13 +7,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 #define LTEMPS 32
+
 int main(int argc, char const *argv[])
 {
-	struct stat sstat;
+	//struct stat sstat;// non utilisée pour le moment
 	struct stat info;
 	char type;
 	char pws[9],grs[9],temps[LTEMPS];
-	if (stat(argv[1],&info)!=1)
+	if (lstat(argv[1],&info)!=1)// lstat prend en compte les link
 	{
 		struct passwd *pw=getpwuid(info.st_uid);
 		if (pw != NULL)
@@ -23,7 +24,7 @@ int main(int argc, char const *argv[])
 
 		}
 		else {
-			printf("%li \n",info.st_uid);
+			printf("%lu \n",(unsigned long int)info.st_uid);// cast pour passer en lu
 		}
 		struct group *gr=getgrgid(info.st_gid);
 		if (gr!=NULL)
@@ -33,8 +34,8 @@ int main(int argc, char const *argv[])
 		}
 		else
 		{
-			printf("%s\n",info.st_gid );
-		};
+			printf("%lu\n",(unsigned long int)info.st_gid );// idem
+		}
 		if (S_ISREG(info.st_mode))
 		{
 			type='-';
@@ -42,6 +43,10 @@ int main(int argc, char const *argv[])
 		else if (S_ISDIR(info.st_mode))
 		{
 			type='d';
+		}
+		else if (S_ISLNK(info.st_mode))//pour perendr en compte les liens symboliques.
+		{
+			type='l';
 		}
 		else if (S_ISCHR(info.st_mode))
 		{
@@ -73,7 +78,7 @@ int main(int argc, char const *argv[])
 				temps);
 
 	}
-	/*int i;
+	/*
 	if (argc < 2)		
 	{
 		if (fstat(STDIN_FILENO,&sstat)==-1)
@@ -81,9 +86,10 @@ int main(int argc, char const *argv[])
 					fprintf(stderr, "%s: impossible d'obtenir le statut de %s \n",argv[0],"<STDIN>" );
 					exit(EXIT_FAILURE);
 				}
-		print_stat("<STDIN>\n",&sstat);		
+		printstat("<STDIN>\n",&sstat);		
 	}
-	else {
+	else 
+	{
 		int i;
 		for (i = 0; i < argc; ++i)
 		{
@@ -92,8 +98,8 @@ int main(int argc, char const *argv[])
 				perror("problem with the stat fonction");
 				exit(EXIT_FAILURE);
 			}
-		print_stat(argv[i],&sstat);
+		printstat(argv[i],&sstat);
 		}
-	}
-	exit(EXIT_FAILURE);*/
+	}*/
+	exit(EXIT_FAILURE);
 }
