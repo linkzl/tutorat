@@ -1,0 +1,15 @@
+#on gentoo
+
+lister les groupes:
+cat /etc/group
+
+créer un utilisateur :
+useradd <nom_de_l'utilisateur>
+
+créer un groupe:
+groupadd <nom_du_groupe>
+
+ajouter un nouvel utilisateur a un groupe :
+useradd <utilisateur> -G  <groupe>
+
+vérifier avec cat "/etc/group"

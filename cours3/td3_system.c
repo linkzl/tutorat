@@ -8,6 +8,23 @@
 #include <unistd.h>
 #define LTEMPS 32
 
+/**
+	Prend l'habitude d'utiliser l'option -Wall quand tu compile
+	et vérifie qu'il n'y ai aucune erreurs.
+
+	rajoute des comentaire dans ton code pour expliquer ce 
+	que fais chaques fonctions ainsi que les arguments.
+
+
+	l'affichage "classique" de ls est plutôt :
+	droits user groupe taille date nom
+	toi tu as mit les user et groupe avant les droits
+
+
+**/
+
+
+
 int main(int argc, char const *argv[])
 {
 	//struct stat sstat;// non utilisée pour le moment
@@ -19,22 +36,22 @@ int main(int argc, char const *argv[])
 		struct passwd *pw=getpwuid(info.st_uid);
 		if (pw != NULL)
 		{
-			printf("%s \n",pw->pw_name );
+			//printf("%s \t",pw->pw_name );
 			sprintf(pws,"%8d",(int)info.st_uid);
 
 		}
 		else {
-			printf("%lu \n",(unsigned long int)info.st_uid);// cast pour passer en lu
+			printf("%lu \t",(unsigned long int)info.st_uid);// cast pour passer en lu
 		}
 		struct group *gr=getgrgid(info.st_gid);
 		if (gr!=NULL)
 		{
-			printf("%s\n",gr->gr_name );
+			//printf("%s\t",gr->gr_name );
 			sprintf(grs,"%8d",(char)info.st_gid);
 		}
 		else
 		{
-			printf("%lu\n",(unsigned long int)info.st_gid );// idem
+			printf("%lu\t",(unsigned long int)info.st_gid );// idem
 		}
 		if (S_ISREG(info.st_mode))
 		{
@@ -44,10 +61,10 @@ int main(int argc, char const *argv[])
 		{
 			type='d';
 		}
-		else if (S_ISLNK(info.st_mode))//pour perendr en compte les liens symboliques.
-		{
-			type='l';
-		}
+		else if (S_ISLNK(info.st_mode))//pour prendre en compte les liens symboliques.
+		{							   //
+			type='l';				   //
+		}							   //
 		else if (S_ISCHR(info.st_mode))
 		{
 			type='c';
@@ -61,7 +78,7 @@ int main(int argc, char const *argv[])
 			type='p';
 		}
 		strftime(temps,LTEMPS,"%a %e %h %Y %H:%M:%S",localtime(&(info.st_mtime)));
-		printf("%c%c%c%c%c%c%c%c%c%c %2d %8s %8s %9d %s \n",type,
+		printf("%c%c%c%c%c%c%c%c%c%c %2d %s %s %9d %s",type,
 				info.st_mode&S_IRUSR?'r':'-',
 				info.st_mode&S_IWUSR?'w':'-',
 				info.st_mode&S_IXUSR?'x':'-',
@@ -72,14 +89,18 @@ int main(int argc, char const *argv[])
 				info.st_mode&S_IWOTH?'w':'-',
 				info.st_mode&S_IXOTH?'x':'-',
 				(int)info.st_nlink,
-				pws,
-				grs,
+				pw->pw_name, // modification affichage user
+				gr->gr_name, // modification affichage group
 				(int)info.st_size,
 				temps);
-
+//il manquais l'affichage du nom du fichier !
+		printf(" %s\n",argv[1] );
 	}
-	/*
-	if (argc < 2)		
+	
+//rajoute des commentaires ton fichier pour expliquer ce que tu fais
+
+
+/*	if (argc < 2)		
 	{
 		if (fstat(STDIN_FILENO,&sstat)==-1)
 				{
