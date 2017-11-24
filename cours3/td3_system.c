@@ -8,7 +8,7 @@
 #include <unistd.h>
 #define LTEMPS 32
 
-/**
+/*
 	Prend l'habitude d'utiliser l'option -Wall quand tu compile
 	et vérifie qu'il n'y ai aucune erreurs.
 
@@ -21,7 +21,7 @@
 	toi tu as mit les user et groupe avant les droits
 
 
-**/
+*/
 
 
 
